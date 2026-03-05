@@ -1,0 +1,9 @@
+# Core Ansible engine
+ansible==8.5.0
+
+# Code quality tools
+ansible-lint==6.21.1
+
+# Common python libraries required by Ansible modules
+netaddr==0.9.0
+jmespath==1.0.1

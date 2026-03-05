@@ -1,0 +1,27 @@
+---
+- name: Managed Node Maintenance
+  hosts: all
+  become: true
+
+  vars:
+    # A list of files we want to ensure exist for auditing
+    audit_files:
+      - /tmp/audit_log_alpha.txt
+      - /tmp/audit_log_beta.txt
+
+  tasks:
+    - name: Create audit files using a Loop
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: touch
+        mode: '0644'
+      loop: "{{ audit_files }}"
+
+    - name: Run a command only on Ubuntu nodes
+      ansible.builtin.shell: "echo 'This is an Ubuntu system' > /tmp/os_check.txt"
+      # This uses 'Facts' gathered by the setup module automatically
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Display a message based on a variable
+      ansible.builtin.debug:
+        msg: "The maintenance is being performed by {{ admin_email }}"

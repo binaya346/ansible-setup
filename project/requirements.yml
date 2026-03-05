@@ -1,0 +1,9 @@
+---
+collections:
+  # Standard community modules (highly recommended for all projects)
+  - name: community.general
+    version: 7.4.0
+  
+  # For managing Docker containers via Ansible
+  - name: community.docker
+    version: 3.4.11

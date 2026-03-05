@@ -1,0 +1,9 @@
+---
+# Standard packages to install on all lab machines
+base_packages:
+  - curl
+  - vim
+  - htop
+
+# Global admin email
+admin_email: "devops@yourdomain.com"

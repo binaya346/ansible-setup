@@ -1,0 +1,3 @@
+---
+# A custom variable just for node_01
+custom_welcome_message: "Welcome to Node 01 - The Primary Web Server"

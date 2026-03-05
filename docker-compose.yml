@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # The Brain
+  ansible_controller:
+    build:
+      context: .
+      dockerfile: Dockerfile.controller
+    container_name: ansible_controller
+    volumes:
+      - ./:/home/ansible/project
+    networks:
+      ansible_net:
+        ipv4_address: 10.99.0.10
+
+  # The Targets
+  node_01:
+    build:
+      context: .
+      dockerfile: Dockerfile.managed
+    container_name: node_01
+    networks:
+      ansible_net:
+        ipv4_address: 10.99.0.11
+
+  node_02:
+    build:
+      context: .
+      dockerfile: Dockerfile.managed
+    container_name: node_02
+    networks:
+      ansible_net:
+        ipv4_address: 10.99.0.12
+
+networks:
+  ansible_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.99.0.0/24

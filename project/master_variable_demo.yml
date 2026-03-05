@@ -1,0 +1,58 @@
+---
+- name: Advanced Variable and Logic Demonstration
+  hosts: all
+  become: true
+
+  vars:
+    # 1. Standard Variable (String)
+    app_name: "Legacy-App"
+
+    # 2. List Variable (Array) - Used for simple sequences
+    required_folders:
+      - /opt/app/logs
+      - /opt/app/bin
+      - /opt/app/config
+
+    # 3. Dictionary Variable (Key-Value Pairs) - Used for structured data
+    user_database:
+      - name: "alice"
+        uid: 2001
+        group: "developers"
+      - name: "bob"
+        uid: 2002
+        group: "testers"
+
+  tasks:
+    # --- LOOPING OVER A LIST ---
+    - name: Create directory structure from a List
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ required_folders }}"
+      # 'item' is a magic keyword that represents the current element in the loop.
+
+    # --- LOOPING OVER A DICTIONARY (Complex Data) ---
+    - name: Provision users from a Dictionary
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
+        group: "{{ item.group }}"
+        state: present
+      loop: "{{ user_database }}"
+      # Here, 'item' represents one 'block' of the user_database list.
+
+    # --- THE WHEN CONDITION (Decision Making) ---
+    - name: Special task for Ubuntu nodes only
+      ansible.builtin.shell: "echo 'Ubuntu Optimized' > /opt/app/config/os_note.txt"
+      when: ansible_distribution == "Ubuntu"
+      # If the node is CentOS, this task is simply skipped.
+
+    # --- MULTIPLE CONDITIONS ---
+    - name: Task for node_01 only AND if it is Ubuntu
+      ansible.builtin.debug:
+        msg: "This is the primary node on an Ubuntu system!"
+      when: 
+        - inventory_hostname == "node_01"
+        - ansible_distribution == "Ubuntu"
+      # Both must be true for this to run.
