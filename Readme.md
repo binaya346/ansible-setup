@@ -29,3 +29,15 @@ ansible-masterclass/               # The root folder on your laptop
 **How to use it**: Once your container is running, you just execute `ansible-galaxy collection install -r requirements.yml` inside the controller, and it pulls down all the necessary modules for your playbooks.`
 
 **Verify**: To verify tools are installed using `ansible-galaxy collection list` command that too inside container. 
+
+# Testing Connectivity (ping)
+`ansible all -m ping`
+
+# Managing Services (service)
+`ansible webservers -m ansible.builtin.service -a "name=nginx state=restarted"`
+
+# Investigating Systems
+`ansible node_01 -m ansible.builtin.setup`
+
+# Execute playbook
+`ansible-playbook master_variable_demo.yml`
