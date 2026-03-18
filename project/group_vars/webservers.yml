@@ -1,0 +1,26 @@
+---
+# ==============================================================================
+# GROUP_VARS/WEBSERVERS.YML
+# ==============================================================================
+# Why use 'webservers.yml'?
+# -------------------------
+# This file applies variables ONLY to hosts belonging to the 'webservers' group.
+# It allows you to define configurations specific to a role (like a Web Server)
+# without affecting other nodes in the network.
+# ==============================================================================
+
+# 1. Apache Configuration
+# These are variables that only matter for nodes running a web server.
+http_port: 80
+document_root: "/var/www/html"
+server_admin: "webmaster@{{ domain_name }}"
+
+# 2. Group-Specific Packages
+web_packages:
+  - apache2
+  - php
+  - libapache2-mod-php
+
+# 3. Variable Hierarchy Demonstration
+# This variable overrides the value from 'all.yml' for any host in this group.
+precedence_test: "I am from group_vars/webservers.yml (Group Override)"

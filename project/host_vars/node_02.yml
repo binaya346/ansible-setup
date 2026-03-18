@@ -1,0 +1,13 @@
+---
+# ==============================================================================
+# HOST_VARS/NODE_02.YML
+# ==============================================================================
+# host_vars for node_02
+# ==============================================================================
+
+# 1. Custom Welcome Message
+custom_welcome_message: "Welcome to Node 02 - The Secondary Backup Server"
+
+# 2. Variable Hierarchy Demonstration
+# Node 02 does NOT override 'precedence_test', so it will inherit from 'webservers.yml'.
+# This shows how Ansible merges variables across different levels.

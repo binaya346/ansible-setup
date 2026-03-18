@@ -1,0 +1,6 @@
+---
+- name: Role-based Playbook Demo
+  hosts: all
+  become: yes
+  roles:
+    - common

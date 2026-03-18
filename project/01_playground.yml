@@ -1,0 +1,56 @@
+---
+- name: Ansible Hands-on Playground
+  hosts: all
+  become: yes
+  vars:
+    course_name: "Ansible 101"
+    student_name: "Learner"
+    target_dir: "/tmp/ansible_labs"
+    web_package: "nginx"
+
+  tasks:
+    # 1. Connectivity Check (Debug Module)
+    - name: 01 - Say Hello
+      debug:
+        msg: "Welcome {{ student_name }} to {{ course_name }}! Managing {{ ansible_hostname }}"
+
+    # 2. Package Management (Apt Module)
+    - name: 02 - Ensure Nginx is installed
+      apt:
+        name: "{{ web_package }}"
+        state: present
+        update_cache: yes
+
+    # 3. File & Directory Management (File Module)
+    - name: 03 - Create lab directory
+      file:
+        path: "{{ target_dir }}"
+        state: directory
+        mode: '0755'
+
+    # 4. Copying Files (Copy Module)
+    - name: 04 - Create a simple text file
+      copy:
+        content: "Lab started at {{ ansible_date_time.iso8601 }}"
+        dest: "{{ target_dir }}/status.txt"
+
+    # 5. Service Management (Service Module)
+    - name: 05 - Ensure Nginx is running
+      service:
+        name: "{{ web_package }}"
+        state: started
+        enabled: yes
+
+    # 6. Shell Commands (Shell Module)
+    - name: 06 - Check disk usage
+      shell: "df -h"
+      register: disk_info
+
+    - name: 07 - Display disk usage
+      debug:
+        var: disk_info.stdout_lines[0:5]
+
+  post_tasks:
+    - name: Final Message
+      debug:
+        msg: "Playbook completed successfully on {{ ansible_hostname }}!"

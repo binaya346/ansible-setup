@@ -1,0 +1,13 @@
+---
+- name: 01 - Ensure base packages are installed
+  apt:
+    name: "{{ base_packages }}"
+    state: present
+    update_cache: yes
+
+- name: 02 - Create a common login banner (MOTD)
+  copy:
+    content: |
+      Welcome to {{ ansible_hostname }}. This node is managed by Ansible.
+      Message: {{ custom_welcome_message | default('Standard Lab Machine') }}
+    dest: /etc/motd

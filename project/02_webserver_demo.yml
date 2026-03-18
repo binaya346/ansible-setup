@@ -1,0 +1,47 @@
+---
+- name: Comprehensive Ansible Demo
+  hosts: webservers
+  become: yes
+  vars:
+    # Variables can be overridden in the playbook or via inventory
+    web_package_name: "nginx"
+    root_dir: "/var/www/html"
+
+  tasks:
+    - name: 01 - Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: 02 - Install Nginx
+      apt:
+        name: "{{ web_package_name }}"
+        state: present
+
+    - name: 03 - Copy base Nginx configuration
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Nginx
+
+    - name: 04 - Deploy custom index.html using Template
+      template:
+        src: files/index.html.j2
+        dest: "{{ root_dir }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: 05 - Ensure Nginx is started and enabled
+      service:
+        name: "{{ web_package_name }}"
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: "{{ web_package_name }}"
+        state: restarted

@@ -1,9 +1,37 @@
 ---
-# Standard packages to install on all lab machines
+# ==============================================================================
+# GROUP_VARS/ALL.YML
+# ==============================================================================
+# Why use 'all.yml'?
+# ------------------
+# Variables defined here are applied to EVERY host in your inventory.
+# Use this for global settings like DNS, NTP, admin emails, or common packages
+# that should be consistent across your entire infrastructure.
+# ==============================================================================
+
+# 1. Global Networking & Identity
+domain_name: "lab.techaxis.com"
+timezone: "Asia/Kathmandu"
+
+# 2. Administrative Information
+admin_email: "admin@techaxis.com"
+organization_name: "TechAxis Lab"
+
+# 3. Standard Packages (Installed on every node)
+# These are essential tools for any Linux server in our lab.
 base_packages:
   - curl
   - vim
   - htop
+  - git
+  - tree
+  - net-tools
 
-# Global admin email
-admin_email: "devops@yourdomain.com"
+# 4. Security Defaults
+# A global flag to enable/disable security hardening across all nodes.
+enable_security_hardening: false
+
+# 5. Variable Hierarchy Demonstration
+# This variable is defined at the 'all' level.
+# It can be overridden by group_vars or host_vars.
+precedence_test: "I am from group_vars/all.yml (Global Default)"

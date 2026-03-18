@@ -1,0 +1,31 @@
+---
+- name: Demonstration of Variable Precedence (Hierarchy)
+  hosts: all
+  gather_facts: false # Faster execution for demonstration purposes
+
+  tasks:
+    - name: Display variables to show the hierarchy
+      ansible.builtin.debug:
+        msg:
+          - "--------------------------------------------------------"
+          - "HOST: {{ inventory_hostname }}"
+          - "Hierarchy Test: {{ precedence_test }}"
+          - "HTTP Port: {{ http_port | default('Not Defined') }}"
+          - "Welcome Message: {{ custom_welcome_message | default('No custom message found') }}"
+          - "Admin Email (Global): {{ admin_email }}"
+          - "--------------------------------------------------------"
+
+    - name: Show the list of base packages from 'all.yml'
+      ansible.builtin.debug:
+        msg: "The following packages will be installed: {{ base_packages | join(', ') }}"
+
+    - name: Explain where 'http_port' is coming from
+      ansible.builtin.debug:
+        msg: >
+          For {{ inventory_hostname }}, the http_port is {{ http_port }}.
+          {% if inventory_hostname == 'node_01' %}
+          (This came from 'host_vars/node_01.yml' - it overrides the group default!)
+          {% elif inventory_hostname == 'node_02' %}
+          (This came from 'group_vars/webservers.yml' - it uses the group default.)
+          {% endif %}
+      when: http_port is defined

@@ -1,3 +1,22 @@
 ---
-# A custom variable just for node_01
+# ==============================================================================
+# HOST_VARS/NODE_01.YML
+# ==============================================================================
+# Why use host-specific variables?
+# --------------------------------
+# Host-specific variables have the HIGHEST priority (besides extra-vars).
+# Use this when ONE host needs a unique configuration that others don't,
+# such as a different IP, a specific environment variable, or a custom message.
+# ==============================================================================
+
+# 1. Custom Welcome Message
+# A unique message that is only seen on this specific node.
 custom_welcome_message: "Welcome to Node 01 - The Primary Web Server"
+
+# 2. Host-Level Overrides
+# This node will listen on a different port than the rest of the group.
+http_port: 8080
+
+# 3. Variable Hierarchy Demonstration
+# This variable overrides values from both 'all.yml' and 'webservers.yml'.
+precedence_test: "I am from host_vars/node_01.yml (Highest Priority!)"
