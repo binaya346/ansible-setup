@@ -4,6 +4,7 @@ base_packages:
   - curl
   - vim
   - htop
+  - nginx
 
 # Global admin email
 admin_email: "devops@yourdomain.com"

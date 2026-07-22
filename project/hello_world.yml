@@ -1,0 +1,22 @@
+---
+# The simplest possible playbook: connect, gather facts, print something back.
+# Run it with: ansible-playbook hello_world.yml
+
+- name: My First Ansible Playbook
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Say hello to each node
+      ansible.builtin.debug:
+        msg: "Hello from {{ inventory_hostname }}! {{ custom_welcome_message | default('(no welcome message set for this host)') }}"
+
+    - name: Show facts Ansible gathered automatically
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} is running {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+    - name: Prove the playbook actually ran on this host
+      ansible.builtin.file:
+        path: /tmp/hello_ansible.txt
+        state: touch
+        mode: '0644'

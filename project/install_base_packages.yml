@@ -1,0 +1,26 @@
+---
+# Installs every package listed under `base_packages` in inventory/group_vars/all.yml.
+# Since that var lives in group_vars/all.yml, it applies to every host in the inventory
+# without being repeated here - that's the whole point of group_vars.
+# Run it with: ansible-playbook install_base_packages.yml
+
+- name: Install Base Packages on All Servers
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt package cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install packages defined in group_vars/all.yml (base_packages)
+      ansible.builtin.apt:
+        name: "{{ base_packages }}"
+        state: present
+
+    - name: Make sure nginx is enabled and running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
